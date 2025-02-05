@@ -1,0 +1,23 @@
+Customer(Id, FirstName, LastName, Username, Password), Id PK
+
+CustomerOrder(Id, OrderDate, CityId, CustomerId, OrderStatus), Id PK
+
+City(Id, Name), Id PK
+
+OrderDetail(Id, CustomerOrderId, ShoeId, Quantity), Id PK
+
+Shoe(Id, Brand, Name, Size, Color, Price, Stock), Id PK
+
+ShoeCategoryMapping(Id, ShoeId, CategoryId), Id PK
+
+Category(Id, Name), Id PK
+
+
+CustomerOrder(CityId) references City(Id)
+CustomerOrder(CustomerId) references Customer(Id)
+
+OrderDetail(CustomerOrderId) references CustomerOrder(Id)
+OrderDetail(ShoeId) references Shoe(Id)
+
+ShoeCategoryMapping(ShoeId) references Shoe(Id)
+ShoeCategoryMapping(CategoryId) references Category(Id)
