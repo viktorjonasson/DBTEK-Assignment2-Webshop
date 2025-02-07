@@ -1,6 +1,6 @@
 Customer(Id, FirstName, LastName, Username, Password), Id PK
 
-CustomerOrder(Id, OrderDate, CityId, CustomerId, OrderStatus), Id PK
+CustomerOrder(Id, CityId, CustomerId, Status), Id PK
 
 City(Id, Name), Id PK
 
@@ -12,6 +12,8 @@ ShoeCategoryMapping(Id, ShoeId, CategoryId), Id PK
 
 Category(Id, Name), Id PK
 
+OutOfStock(Id, ShoeId), Id PK
+
 
 CustomerOrder(CityId) references City(Id)
 CustomerOrder(CustomerId) references Customer(Id)
@@ -21,3 +23,5 @@ OrderDetail(ShoeId) references Shoe(Id)
 
 ShoeCategoryMapping(ShoeId) references Shoe(Id)
 ShoeCategoryMapping(CategoryId) references Category(Id)
+
+OutOfStock(ShoeId) references Shoe(Id)

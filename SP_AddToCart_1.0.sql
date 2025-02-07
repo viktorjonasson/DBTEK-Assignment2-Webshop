@@ -17,10 +17,8 @@ begin
     set autocommit = 0;
 	start transaction;
     
-    -- Kollar först om ordern existerar
 	if exists (select 1 from CustomerOrder where CustomerId = in_CustomerId and Status = 'Active') then
 		set CurrentOrderId = (select Id from CustomerOrder where CustomerId = in_CustomerId and Status = 'Active');
-	-- Annars skapar ny order
     else
 		insert into CustomerOrder(CustomerId, Status) values
 		(in_CustomerId, 'Active');
@@ -31,14 +29,12 @@ begin
 		set CurrentOrderId = LAST_INSERT_ID();
     end if;
     
-    -- Först ökar kvantitet
     if exists (select 1 from OrderDetail inner join Shoe on Shoe.Id = ShoeId where CustomerOrderId = CurrentOrderId and ShoeId = in_ShoeId and Shoe.Stock > 0) then
 		update OrderDetail set Quantity = Quantity + 1 where CustomerOrderId = CurrentOrderId and in_ShoeId = ShoeId;
         if (select ROW_COUNT()) = 0 then
             signal sqlstate '45000'
             set message_text = 'Failed to update order quantity. Please try again or contact support:';
         end if;
-	-- Annars lägger till ny rad
     elseif exists (select 1 from Shoe where Shoe.Id = in_ShoeId and Stock > 0) then
 		insert into OrderDetail(CustomerOrderId, ShoeId, Quantity) values
 		(CurrentOrderId, in_ShoeId, 1);

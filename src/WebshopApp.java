@@ -52,7 +52,6 @@ public class WebshopApp {
         System.out.println("3: Exit the shop");
     }
 
-
     public void productSelection() {
             System.out.println("Choose a product by entering its number:");
         while (true) {
