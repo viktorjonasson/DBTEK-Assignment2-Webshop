@@ -16,9 +16,22 @@ begin
 		insert into City(Name) values
 		(in_City);
         set CurrentCity = LAST_INSERT_ID();
+        if (select ROW_COUNT()) = 0 then
+			signal sqlstate '45000'
+			set message_text = 'There was an error registering the city. Please try again, or contact support.';
+		end if;
     end if;
 
-	update CustomerOrder set CityId = CurrentCity, Status = 'Paid' where Id = in_CustomerOrderId;
+	if exists (select 1 from CustomerOrder where Id = in_CustomerOrderId) then
+		update CustomerOrder set CityId = CurrentCity, Status = 'Paid' where Id = in_CustomerOrderId;
+        if (select ROW_COUNT()) = 0 then
+			signal sqlstate '45000'
+			set message_text = 'There was an error placing your order. Please try again, or contact support.';
+		end if;
+    else
+		signal sqlstate '45002'
+        set message_text = 'Your shopping cart seems to have been emptied due to an unexpected error. Please start again.';
+	end if;
     
     commit;
     set autocommit = 1;

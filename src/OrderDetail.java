@@ -1,7 +1,7 @@
 public class OrderDetail {
     private int lineQuantity;
     private double subTotal;
-    Shoe shoe = new Shoe();
+    Shoe shoe;
 
     public OrderDetail(Shoe shoe, int lineQuantity, double subTotal) {
         this.shoe = shoe;
@@ -13,24 +13,12 @@ public class OrderDetail {
         return lineQuantity;
     }
 
-    public void setLineQuantity(int lineQuantity) {
-        this.lineQuantity = lineQuantity;
-    }
-
     public double getSubTotal() {
         return subTotal;
     }
 
-    public void setSubTotal(double subTotal) {
-        this.subTotal = subTotal;
-    }
-
     public Shoe getShoe() {
         return shoe;
-    }
-
-    public void setShoe(Shoe shoe) {
-        this.shoe = shoe;
     }
 
     @Override

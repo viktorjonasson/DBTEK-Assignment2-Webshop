@@ -6,6 +6,15 @@ public class Shoe {
     private String Color;
     private double Price;
 
+    public Shoe(int id, String brand, String name, int size, String color, double price) {
+        this.Id = id;
+        this.Brand = brand;
+        this.Name = name;
+        this.Size = size;
+        this.Color = color;
+        this.Price = price;
+    }
+
     public Shoe() {
     }
 
@@ -13,48 +22,24 @@ public class Shoe {
         return Id;
     }
 
-    public void setId(int id) {
-        this.Id = id;
-    }
-
     public String getBrand() {
         return Brand;
-    }
-
-    public void setBrand(String brand) {
-        this.Brand = brand;
     }
 
     public String getName() {
         return Name;
     }
 
-    public void setName(String name) {
-        this.Name = name;
-    }
-
     public int getSize() {
         return Size;
-    }
-
-    public void setSize(int size) {
-        this.Size = size;
     }
 
     public String getColor() {
         return Color;
     }
 
-    public void setColor(String color) {
-        this.Color = color;
-    }
-
     public double getPrice() {
         return Price;
-    }
-
-    public void setPrice(double price) {
-        this.Price = price;
     }
 
     @Override

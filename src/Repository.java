@@ -16,7 +16,7 @@ public class Repository implements RepositoryInterface {
         }
     }
 
-    public Customer retrieveCustomer(String userName, String password) {
+    public Customer retrieveCustomer(String userName, String password) throws NullPointerException, SQLException {
 
         Customer currentCustomer = null;
         try (Connection DBcon = DriverManager.getConnection(
@@ -24,7 +24,7 @@ public class Repository implements RepositoryInterface {
                 prop.getProperty("name"),
                 prop.getProperty("password"));
 
-             CallableStatement stmt = DBcon.prepareCall("call ValidateCustomer(?, ?)");
+             CallableStatement stmt = DBcon.prepareCall("call ValidateCustomer(?, ?)")
         ) {
 
             stmt.setString(1, userName);
@@ -34,13 +34,7 @@ public class Repository implements RepositoryInterface {
             while (rs.next()) {
                 currentCustomer = new Customer(rs.getInt("Id"), rs.getString("FirstName"));
             }
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode() + e.getMessage());
         }
-
-        //Idea: Add something, maybe a variable, to indicate if the customer has an order or not.
-        //So that we can later say if the product was added to a previous order or not.
-
         return currentCustomer;
     }
 
@@ -58,13 +52,13 @@ public class Repository implements RepositoryInterface {
              ResultSet rs = stmt.executeQuery("select * from Shoe where Shoe.Stock > 0")
         ){
             while (rs.next()) {
-                Shoe thisShoe = new Shoe();
-                thisShoe.setId(rs.getInt("Id"));
-                thisShoe.setBrand(rs.getString("Brand"));
-                thisShoe.setName(rs.getString("Name"));
-                thisShoe.setSize(rs.getInt("Size"));
-                thisShoe.setColor(rs.getString("Color"));
-                thisShoe.setPrice(rs.getDouble("Price"));
+                Shoe thisShoe = new Shoe(
+                        rs.getInt("Id"),
+                        rs.getString("Brand"),
+                        rs.getString("Name"),
+                        rs.getInt("Size"),
+                        rs.getString("Color"),
+                        rs.getDouble("Price"));
                 tempList.add(thisShoe);
             }
 
@@ -78,22 +72,19 @@ public class Repository implements RepositoryInterface {
         return allProducts;
     }
 
-    public void addToCart(int customerId, int shoeId) {
+    public void addToCart(int customerId, int shoeId) throws SQLException {
 
         try (Connection DBcon = DriverManager.getConnection(
                 prop.getProperty("connectionString"),
                 prop.getProperty("name"),
                 prop.getProperty("password"));
 
-             CallableStatement stmt = DBcon.prepareCall("call AddToCart(?, ?)");
+             CallableStatement stmt = DBcon.prepareCall("call AddToCart(?, ?)")
         ) {
 
             stmt.setInt(1, customerId);
             stmt.setInt(2, shoeId);
             stmt.executeQuery();
-
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode() + e.getMessage());
         }
     }
 
@@ -106,7 +97,7 @@ public class Repository implements RepositoryInterface {
                 prop.getProperty("name"),
                 prop.getProperty("password"));
 
-            CallableStatement stmt = DBcon.prepareCall("call GetOrder(?,?)");) {
+            CallableStatement stmt = DBcon.prepareCall("call GetOrder(?,?)")) {
             stmt.setInt(1, customerId);
             stmt.registerOutParameter(2, Types.DOUBLE);
             ResultSet rs = stmt.executeQuery();
@@ -114,16 +105,16 @@ public class Repository implements RepositoryInterface {
             int orderId;
 
             if (!rs.next()) {
-                throw new NullPointerException("You have no products in your shopping cart.");
+                throw new NullPointerException();
             }
             do {
-                Shoe thisShoe = new Shoe();
-                thisShoe.setId(rs.getInt("Id"));
-                thisShoe.setBrand(rs.getString("Brand"));
-                thisShoe.setName(rs.getString("Name"));
-                thisShoe.setSize(rs.getInt("Size"));
-                thisShoe.setColor(rs.getString("Color"));
-                thisShoe.setPrice(rs.getDouble("Price"));
+                Shoe thisShoe = new Shoe(
+                        rs.getInt("Id"),
+                        rs.getString("Brand"),
+                        rs.getString("Name"),
+                        rs.getInt("Size"),
+                        rs.getString("Color"),
+                        rs.getDouble("Price"));
                 OrderDetail thisOrderDetail = new OrderDetail(
                         thisShoe,
                         rs.getInt("Quantity"),
@@ -140,21 +131,18 @@ public class Repository implements RepositoryInterface {
         return thisCustomerOrder;
     }
 
-    public void placeOrder(int orderId, String city) {
+    public void placeOrder(int orderId, String city) throws SQLException {
 
         try (Connection DBcon = DriverManager.getConnection(
                 prop.getProperty("connectionString"),
                 prop.getProperty("name"),
                 prop.getProperty("password"));
 
-             CallableStatement stmt = DBcon.prepareCall("call PlaceOrder(?, ?)");
+             CallableStatement stmt = DBcon.prepareCall("call PlaceOrder(?, ?)")
         ) {
             stmt.setInt(1, orderId);
             stmt.setString(2, city);
-            int rowsAffected = stmt.executeUpdate();
-            System.out.println(rowsAffected + " rows affected.");
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode() + e.getMessage());
+            stmt.executeUpdate();
         }
     }
 }

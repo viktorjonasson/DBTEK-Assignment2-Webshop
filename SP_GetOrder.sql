@@ -21,9 +21,9 @@ begin
 	from CustomerOrder
 	inner join Customer 
     on CustomerOrder.CustomerId = Customer.Id
-	inner join OrderDetail 
+	inner join OrderDetail
     on CustomerOrder.Id = OrderDetail.CustomerOrderId
-	inner join Shoe 
+	inner join Shoe
     on OrderDetail.ShoeId = Shoe.Id
 	where Customer.Id = in_CustomerId and CustomerOrder.Status = 'Active'
 	group by CustomerOrder.Id;

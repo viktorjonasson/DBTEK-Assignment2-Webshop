@@ -16,32 +16,16 @@ public class CustomerOrder {
         return orderId;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
     public String getCity() {
         return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public double getOrderSum() {
         return orderSum;
     }
 
-    public void setOrderSum(double orderSum) {
-        this.orderSum = orderSum;
-    }
-
     public List<OrderDetail> getOrderEntries() {
         return orderEntries;
-    }
-
-    public void setOrderEntries(List<OrderDetail> orderEntries) {
-        this.orderEntries = orderEntries;
     }
 
     @Override

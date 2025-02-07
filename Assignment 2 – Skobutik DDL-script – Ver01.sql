@@ -107,7 +107,7 @@ insert into City (Name) values
 
 insert into Shoe (Brand, Name, Size, Color, Price, Stock) values
 	('Ecco', 'Rugged Sandals', '38', 'Black', '899', '14'),
-	('Ecco', 'Rugged Sandals', '40', 'Cream', '899', '9'),
+	('Ecco', 'Rugged Sandals', '40', 'Cream', '899', '2'),
 	('Ecco', 'Elegant Boots', '41', 'Black', '2190', '25'),
 	('HM', 'Chunky Sneakers', '38', 'Blue', '499', '34'),
 	('HM', 'Mary Jane Flats', '37', 'Dark Brown', '750', '12'),
@@ -165,8 +165,8 @@ insert into CustomerOrder (CityId, CustomerId, Status) values
 	(3, 1, 'Paid'),
 	(4, 1, 'Paid'),
 	(4, 4, 'Paid'),
-	(4, 3, 'Paid'),
-	(5, 4, 'Paid');
+	(4, 3, 'Active'),
+	(5, 4, 'Active');
 
 insert into OrderDetail (CustomerOrderId, ShoeId, Quantity) values
 	(1, 4, 1),
